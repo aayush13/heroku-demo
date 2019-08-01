@@ -30,7 +30,7 @@ function InputForm () {
                 <div class="form-row">
                     <div class="form-group col-md-4">
                     <label for="inputRoom">No. of Rooms</label>
-                    <input type="number" class="form-control form-control-lg" id="inputRoom" required/>
+                    <input type="number" class="form-control form-control-lg" id="inputRoom" min="1" required/>
                     </div>
                     <div class="form-group col-md-4">
                     <label for="inputRoomType">Type</label>
@@ -43,7 +43,7 @@ function InputForm () {
                     </div>
                     <div class="form-group col-md-4 ">
                     <label for="inputZip">No. of Guests</label>
-                    <input type="numbers" class="form-control form-control-lg" id="inputZip"/>
+                    <input type="number" class="form-control form-control-lg" min="1"  id="inputZip"/>
                     </div>
                 </div>
                 <div class="form-row" style={{ marginTop: 20}}>
