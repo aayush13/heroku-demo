@@ -1,10 +1,17 @@
 h1 {
     align-content: center;
+    color:#c2e3ff;
 }
 
 
 .main_div {
     padding: 25px;
+    background: #181717;
     border: 1px solid #e0e0e0;
     border-radius: 15px;
+}
+
+.check-availability{
+    background-color: #1e83d8;
+    color: white;
 }

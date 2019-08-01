@@ -46,7 +46,7 @@ function InputForm () {
                     </div>
                 </div>
                 <div class="form-row" style={{ marginTop: 20}}>
-                    <button type="submit" class="btn btn-danger btn-lg btn-block">Check Availability</button>
+                    <button type="submit" class="btn btn-lg btn-block check-availability">Check Availability</button>
                 </div>
                 
             </form>
