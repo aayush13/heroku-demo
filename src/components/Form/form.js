@@ -2,9 +2,10 @@ import React from 'react';
 import './form.css'
 
 function InputForm () {
+    var today = new Date().toISOString().split('T')[0];
     return (
         <div className="main_div">
-            <h1> Room Booking App</h1>
+            <h1>Room Booking</h1>
             <form>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -19,11 +20,11 @@ function InputForm () {
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="fromDate">From</label>
-                        <input type="date" class="form-control form-control-lg" id="fromDate" placeholder="" required/>
+                        <input type="date" class="form-control form-control-lg" id="fromDate" placeholder="" min={today} required/>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="toDate">To</label>
-                        <input type="date" class="form-control form-control-lg" id="toDate" placeholder="" required/>
+                        <input type="date" class="form-control form-control-lg" id="toDate" placeholder="" min={today} required/>
                     </div>
                 </div>
                 <div class="form-row">
