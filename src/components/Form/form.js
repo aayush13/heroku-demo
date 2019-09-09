@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Modal,Button} from 'react-bootstrap';
+import moment from 'moment';
 
 
 import './form.css'
@@ -9,10 +10,30 @@ export default class InputForm extends Component {
         today : new Date().toISOString().split('T')[0],
         confirmationModal:false,
         paymentModal: false,
+        availableRooms:[],
+        selectedRoom:null,
+        checkInDate:null,
+        checkOutDate:null
     }
 
-    openConfirmationModal = (event) =>{
+    openConfirmationModal = async(event) =>{
         event.preventDefault();
+        let filteredRooms,allRoomsData;
+        let type= document.getElementById("inputRoomType").value;
+        console.log(typeof(type),type,this.state.checkInDate,this.state.checkOutDate);
+        let url ="https://stepinbooking.herokuapp.com/rooms/available/timestamp"
+        let fetchRooms = await fetch(url,{  
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "checkIn" : this.state.checkInDate,
+                "checkOut" : this.state.checkOutDate,
+                "bookingId" : null
+                }),
+        }) 
+        allRoomsData = await fetchRooms.json()
+        filteredRooms = allRoomsData.filter(room => room.roomType === type)
+        this.setState({availableRooms:allRoomsData,selectedRoom:filteredRooms[0]});
         this.setState({confirmationModal:true});
     }
 
@@ -26,7 +47,28 @@ export default class InputForm extends Component {
     }
 
     closePaymentModal = () =>{
+        let url ="https://stepinbooking.herokuapp.com/bookings/insert"
+        console.log(moment.unix(this.state.checkInDate).utc().utcOffset("+05:30").format())
+        let fetchRooms =  fetch(url,{  
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "checkIn" :moment.unix(this.state.checkInDate).utc().utcOffset("+05:30").format(),
+                "checkOut" : moment.unix(this.state.checkOutDate).utc().utcOffset("+05:30").format(),
+                "firstName" :"aayush",
+                "lastName": "nagpal",
+                "rooms":[this.state.selectedRoom._id]                
+                }),
+        }) 
         this.setState({paymentModal:false});
+    }
+
+    setCheckIn = (event) =>{
+        this.setState({checkInDate:moment(event.target.value).unix()})
+    }
+
+    setCheckOut = (event) =>{
+        this.setState({checkOutDate:moment(event.target.value).unix()})
     }
 
     render(){
@@ -47,12 +89,12 @@ export default class InputForm extends Component {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="fromDate">From</label>
-                            <input type="date" class="form-control form-control-lg" id="fromDate" placeholder="" min={this.state.today} required/>
+                            <label for="checkInDate">Check In</label>
+                            <input type="date" class="form-control form-control-lg" id="checkInDate" placeholder="" min={this.state.today} onChange={this.setCheckIn} required/>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="toDate">To</label>
-                            <input type="date" class="form-control form-control-lg" id="toDate" placeholder="" min={this.state.today} required/>
+                            <label for="checkOutDate">Check Out</label>
+                            <input type="date" class="form-control form-control-lg" id="checkOutDate" placeholder="" min={this.state.today} onChange= {this.setCheckOut} required/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -80,13 +122,14 @@ export default class InputForm extends Component {
                     </button>
                     </div>
                 </form>
-                <Modal show={this.state.confirmationModal} onHide={!this.state.confirmationModal}>
+                {this.state.selectedRoom ?
+                (<div><Modal show={this.state.confirmationModal } onHide={!this.state.confirmationModal}>
                     <Modal.Header>
                         <Modal.Title>Confirm booking</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <p>Please "Proceed" to make the payment of amount XYZ for your booking.</p>
+                        <p>Please "Proceed" to make the payment of amount <b>{this.state.selectedRoom.roomRate}</b> for your booking.</p>
                     </Modal.Body>
 
                     <Modal.Footer>
@@ -107,7 +150,7 @@ export default class InputForm extends Component {
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.closePaymentModal}>Pay</Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal></div>):(null)}
             </div>
         )
     }
