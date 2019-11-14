@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import moment from 'moment';
-
+import { getMultipleRooms } from '../../services/utils'
 
 import './form.css'
 
@@ -15,6 +15,7 @@ export default class InputForm extends Component {
         checkInDate:null,
         checkOutDate:null
     }
+
 
     openConfirmationModal = async(event) =>{
         event.preventDefault();
@@ -33,9 +34,9 @@ export default class InputForm extends Component {
         }) 
         allRoomsData = await fetchRooms.json()
         filteredRooms = allRoomsData.filter(room => room.roomType === type)
-        numberOfRooms = getElementById("inputRoom")
+        let numberOfRooms = document.getElementById("inputRoom")
         console.log(numberOfRooms);
-        selectedRooms = getMultipleRooms (filteredRooms, numberOfRooms)
+        let selectedRooms = getMultipleRooms (filteredRooms, numberOfRooms)
         this.setState({availableRooms:allRoomsData,selectedRoom:filteredRooms[0]});
         this.setState({confirmationModal:true});
     }
@@ -50,7 +51,8 @@ export default class InputForm extends Component {
     }
 
     closePaymentModal = () =>{
-        let url ="https://stepinbooking.herokuapp.com/bookings/insert"
+        let url ="https://stepin-api.herokuapp.com/bookings/insert"
+        console.log(document.getElementById("inputLastName"),document.getElementById("inputFirstName"))
         console.log(moment.unix(this.state.checkInDate).utc().utcOffset("+05:30").format())
         let fetchRooms =  fetch(url,{  
             method: 'post',
@@ -58,9 +60,14 @@ export default class InputForm extends Component {
             body: JSON.stringify({
                 "checkIn" :moment.unix(this.state.checkInDate).utc().utcOffset("+05:30").format(),
                 "checkOut" : moment.unix(this.state.checkOutDate).utc().utcOffset("+05:30").format(),
-                "firstName" :"aayush",
-                "lastName": "nagpal",
-                "rooms":[this.state.selectedRoom._id]                
+                "firstName" :document.getElementById("inputFirstName"),
+                "lastName": document.getElementById("inputLastName"),
+                "rooms":[this.state.selectedRoom._id],
+                "status":{
+                    "cancel":false,
+                    "checkedIn":false,
+                    "checkedOut":false
+                }                
                 }),
         }) 
         this.setState({paymentModal:false});
