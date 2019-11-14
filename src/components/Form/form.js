@@ -71,6 +71,15 @@ export default class InputForm extends Component {
                 }),
         }) 
         this.setState({paymentModal:false});
+        this.setState({
+            today : new Date().toISOString().split('T')[0],
+            confirmationModal:false,
+            paymentModal: false,
+            availableRooms:[],
+            selectedRoom:null,
+            checkInDate:null,
+            checkOutDate:null
+        })
     }
 
     setCheckIn = (event) =>{
@@ -128,7 +137,7 @@ export default class InputForm extends Component {
                     </div>
                     <div class="form-row" style={{ marginTop: 20}}>
                     <button type="submit" class="btn btn-primary">
-                        Launch demo modal
+                        Book
                     </button>
                     </div>
                 </form>
