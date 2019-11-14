@@ -80,6 +80,14 @@ export default class InputForm extends Component {
             checkInDate:null,
             checkOutDate:null
         })
+        document.getElementById('inputFirstName').value = "";
+        document.getElementById('inputLastName').value = "";
+        document.getElementById('checkInDate').value = "";
+        document.getElementById('checkOutDate').value = "";
+        document.getElementById('inputRoom').value = "";
+        document.getElementById('inputRoomType').value = "";
+        document.getElementById('inputGuest').value = "";
+
     }
 
     setCheckIn = (event) =>{
@@ -131,8 +139,8 @@ export default class InputForm extends Component {
                         </select>
                         </div>
                         <div class="form-group col-md-4 ">
-                        <label for="inputZip">No. of Guests</label>
-                        <input type="number" class="form-control form-control-lg" min="1"  id="inputZip"/>
+                        <label for="inputGuest">No. of Guests</label>
+                        <input type="number" class="form-control form-control-lg" min="1"  id="inputGuest"/>
                         </div>
                     </div>
                     <div class="form-row" style={{ marginTop: 20}}>
