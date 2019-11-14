@@ -34,10 +34,10 @@ export default class InputForm extends Component {
         }) 
         allRoomsData = await fetchRooms.json()
         filteredRooms = allRoomsData.filter(room => room.roomType === type)
-        let numberOfRooms = document.getElementById("inputRoom")
+        let numberOfRooms = document.getElementById("inputRoom").value;
         console.log(numberOfRooms);
-        let selectedRooms = getMultipleRooms (filteredRooms, numberOfRooms)
-        this.setState({availableRooms:allRoomsData,selectedRoom:filteredRooms[0]});
+        let listRooms = getMultipleRooms ( filteredRooms, parseInt(numberOfRooms) );
+        this.setState({ availableRooms:allRoomsData, selectedRoom:listRooms });
         this.setState({confirmationModal:true});
     }
 
@@ -60,9 +60,9 @@ export default class InputForm extends Component {
             body: JSON.stringify({
                 "checkIn" :moment.unix(this.state.checkInDate).utc().utcOffset("+05:30").format(),
                 "checkOut" : moment.unix(this.state.checkOutDate).utc().utcOffset("+05:30").format(),
-                "firstName" :document.getElementById("inputFirstName"),
-                "lastName": document.getElementById("inputLastName"),
-                "rooms":[this.state.selectedRoom._id],
+                "firstName" :document.getElementById("inputFirstName").value,
+                "lastName": document.getElementById("inputLastName").value,
+                "rooms":this.state.selectedRoom,
                 "status":{
                     "cancel":false,
                     "checkedIn":false,
@@ -139,7 +139,7 @@ export default class InputForm extends Component {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <p>Please "Proceed" to make the payment of amount <b>{this.state.selectedRoom.roomRate}</b> for your booking.</p>
+                        <p>Please "Proceed" to make the payment of amount <b>Rs. 3500</b> for your booking.</p>
                     </Modal.Body>
 
                     <Modal.Footer>
