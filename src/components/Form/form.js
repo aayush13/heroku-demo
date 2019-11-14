@@ -21,7 +21,7 @@ export default class InputForm extends Component {
         let filteredRooms,allRoomsData;
         let type= document.getElementById("inputRoomType").value;
         console.log(typeof(type),type,this.state.checkInDate,this.state.checkOutDate);
-        let url ="https://stepinbooking.herokuapp.com/rooms/available/timestamp"
+        let url ="https://stepin-api.herokuapp.com/rooms/available"
         let fetchRooms = await fetch(url,{  
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -33,6 +33,9 @@ export default class InputForm extends Component {
         }) 
         allRoomsData = await fetchRooms.json()
         filteredRooms = allRoomsData.filter(room => room.roomType === type)
+        numberOfRooms = getElementById("inputRoom")
+        console.log(numberOfRooms);
+        selectedRooms = getMultipleRooms (filteredRooms, numberOfRooms)
         this.setState({availableRooms:allRoomsData,selectedRoom:filteredRooms[0]});
         this.setState({confirmationModal:true});
     }
